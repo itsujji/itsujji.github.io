@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <title>Chidia Udd POC</title>
     <style>
@@ -16,13 +17,13 @@
         }
 
         #brief{
-            font-size:11px;
+            font-size:10px;
             margin-bottom: 15px;
         }
 
         .container{
-            width:300px;
-            height:550px;
+            width:280px;
+            height:480px;
             margin:auto;
             border:0.5px solid black;
             padding: 15px;
@@ -30,7 +31,7 @@
 
         .container .text-container{
             width: 100%;
-            height: 400px;
+            height: 350px;
             border: 0.5px solid black;
             margin:auto;
         }
@@ -45,7 +46,7 @@
         }
 
         button{
-            width:65px;
+            width:60px;
             height:50px;
         }
 
@@ -111,6 +112,7 @@
             const startBtn = document.querySelector('.startBtn')
             const endBtn = document.querySelector('.endBtn')
 
+            uddBtn.disabled = true
             endBtn.disabled = true
 
             endBtn.addEventListener('click', function(){
@@ -118,13 +120,14 @@
             })
 
             startBtn.addEventListener('click', function(){
+                uddBtn.disabled = false
                 endBtn.disabled = false
                 startBtn.disabled = true
                     setInterval(
                 function(){ 
                     let selector = Math.floor(Math.random() * 10)
-                    let topPx = Math.random() * 350
-                    let leftPx = Math.random() * 250
+                    let topPx = Math.random() * 320
+                    let leftPx = Math.random() * 210
                     displayer.textContent = animals[selector].name
                     displayer.style.top= `${topPx}px`
                     displayer.style.left= `${leftPx}px`
