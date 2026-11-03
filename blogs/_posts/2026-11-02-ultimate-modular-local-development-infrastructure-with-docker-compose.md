@@ -8,11 +8,15 @@ Modern software development requires a lot of moving parts. A typical applicatio
 
 <br>
 
-I recently ran into this exact problem at my current job. I was working on a project that required heavily experimenting with several different types of databases—document stores, vector databases, search engines, and caching layers—to find the right fit for a new architecture. Setting them up natively one by one was tedious, and keeping their configurations in sync across the team was becoming a headache. I needed a way to spin up (and tear down) complex database combinations instantly.
+I recently ran into this exact problem at my current job. I was working on a project that required heavily experimenting with several different types of databases—document stores, vector databases, search engines, and caching layers—to find the right fit for a new architecture. Setting them up natively one by one was tedious, and keeping their configurations in sync was becoming a headache. I needed a way to spin up (and tear down) complex database combinations instantly.
 
 <br>
 
 In this post, we'll explore the robust, production-like local development infrastructure I built using a single `docker-compose.yml` file to solve this problem. This setup isn't just a monolithic block of services; it's a highly modular, scalable, and resilient environment designed to maximize developer productivity and experimentation.
+
+<br>
+
+You can find the complete code for this setup in my GitHub repository: **[local-dev-infrastructure](https://github.com/itsujji/local-dev-infrastructure)**.
 
 <br>
 
@@ -339,7 +343,12 @@ This dramatically reduces onboarding time for new hires. A new developer simply 
 
 <br>
 
-Using this setup is incredibly straightforward.
+Using this setup is incredibly straightforward. First, clone the repository:
+
+```bash
+git clone https://github.com/itsujji/local-dev-infrastructure.git
+cd local-dev-infrastructure
+```
 
 <br>
 
