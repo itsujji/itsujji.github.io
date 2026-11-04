@@ -7,6 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }} | Ujjwal</title>
 
+    <script>
+        (function () {
+            var theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'dark') document.documentElement.classList.add('dark');
+        })();
+    </script>
+
     <!-- Tailwind Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -96,7 +103,7 @@
         const btnIcon = themeBtn.querySelector('i');
 
         // Check for saved theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         if (savedTheme === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
