@@ -46,7 +46,7 @@ Then I asked the trap question: *"If the negation of both `null` and `undefined`
 He paused, thought for a moment, and said, *"Yes."*
 <br>
 <br>
-This interaction highlighted a major gap in his JavaScript knowledge. He had memorized certain behaviors—like the fact that `!null` is true—but he fundamentally missed the underlying concept of **truthy** and **falsy** values. He assumed that because two values coerce to the same boolean result when negated, they must be fundamentally equal. This is a crucial concept in JavaScript that dictates how conditions and type coercions work under the hood.
+This interaction highlighted a major gap in his JavaScript knowledge. He had memorized certain behaviors—like the fact that `!null` is true—but he fundamentally missed the underlying concept of **equality operator**, **truthy** and **falsy** values. He assumed that because two values coerce to the same boolean result when negated, they must be fundamentally equal. This is a crucial concept in JavaScript that dictates how conditions and type coercions work under the hood.
 
 <br>
 ---
@@ -80,13 +80,79 @@ If a value is not on this list, it is **truthy**.
 This means empty arrays (`[]`), empty objects (`{}`), spaces in strings (`" "`), and even the string `"false"` are all truthy!
 <br>
 <br>
+
+## **Equality Operators: `==` vs `===`**
+
+<br>
+
+Truthy and falsy explain what happens in a **boolean context** (like `if` or `!`). **Equality operators** answer a different question: whether two values are considered *equal* when you compare them with `==` or `===`. Confusing the two is exactly what tripped up the candidate in the interview.
+
+<br>
+### **Strict equality (`===` and `!==`)**
+<br>
+Strict equality compares **type and value** with **no type coercion**. If the types differ, the result is `false`, even when the values “look” related.
+
+```javascript
+null === undefined   // false (different types)
+0 === false          // false (number vs boolean)
+"" === false         // false (string vs boolean)
+"0" === 0            // false (string vs number)
+
+null === null        // true
+undefined === undefined // true
+```
+
+<br>
+Use `===` and `!==` by default. They behave predictably and match what most developers expect when they say “equal.”
+
+<br>
+### **Loose equality (`==` and `!=`)**
+<br>
+Loose equality uses the language’s **Abstract Equality Comparison** rules: JavaScript may convert one or both operands before comparing. That is why `==` can surprise you if you treat it like “same meaning in English.”
+
+<br>
+Some common results (after coercion):
+
+```javascript
+null == undefined    // true — special case: only each other, not 0 or ""
+0 == false           // true — false coerces to 0
+"" == false          // true — false coerces to 0, "" coerces to 0
+"0" == 0             // true — string coerces to number
+[] == false          // true — array coerces to "" then to 0
+[] == ![]            // true — infamous edge case (avoid relying on this)
+```
+
+<br>
+`null == undefined` is **`true`**, but **`null == 0`** is **`false`**. So “both are falsy” does **not** mean `==` treats them as equal—except for the dedicated `null`/`undefined` pair.
+
+<br>
+### **Truthy/falsy vs equality**
+<br>
+The `!` operator only tells you whether a value is falsy when coerced to boolean. **Two values can both be falsy and still be unequal under `===`, and often under `==` too.**
+
+```javascript
+!null        // true  (null is falsy)
+!undefined   // true  (undefined is falsy)
+!0           // true  (0 is falsy)
+!""          // true  ("" is falsy)
+
+null === undefined  // false
+0 === ""            // false
+
+null == undefined   // true  (special rule only for this pair)
+0 == ""             // true  (both coerce to 0 — not “because both are falsy”)
+```
+
+<br>
+So the trap in the interview—“if `!a` and `!b` are both true, are `a` and `b` equal?”—is **generally no**. Shared falsiness is not a definition of equality. The candidate’s leap from `!null` and `!undefined` to “null equals undefined” mixed up boolean coercion with comparison operators.
+
+<br>
 ### **Revisiting the Interview Question**
 <br>
 Why is `!undefined` true and `!null` true? Because both `undefined` and `null` are on the falsy list. The logical NOT operator (`!`) coerces the value to a boolean and then flips it. Since they are falsy (`false`), flipping them results in `true`.
 <br>
 <br>
-But does that mean `null == undefined`? 
-Interestingly, `null == undefined` *is* actually `true` in JavaScript due to the language's specific rules for loose equality (`==`). However, `null === undefined` (strict equality) is `false` because they are of different types (`object` vs `undefined`). They are definitely not equal *because* their negations are both true. By the candidate's logic, `!0` is true and `!""` is true, so `0` must equal `""` (which loosely it does, but for different coercion reasons, not because both are falsy). 
+Are `null` and `undefined` equal? Under **`===`**, **no**—different types. Under **`==`**, **yes**, but only because JavaScript defines that one exception, not because negation made them the same. And if you applied the same reasoning to `0` and `""`, you might guess they are equal under `===` (they are not), even though `0 == ""` is true for numeric coercion reasons explained above.
 <br>
 <br>
 
@@ -140,4 +206,4 @@ Similarly, the `&&` operator returns the first **falsy** value it encounters, or
 <br>
 The difference between a junior developer and a seasoned engineer often lies in these foundational concepts. Memorizing what happens when you type `!null` is easy, but understanding *why* it happens allows you to debug complex applications, write cleaner code, and avoid unexpected edge cases.
 
-Next time you write an `if` statement, remember the truthy and falsy rules. They are the invisible gears making your JavaScript logic turn!
+Next time you write an `if` statement, remember the functioning of the equality operator and the truthy and falsy rules. They are the invisible gears making your JavaScript logic turn!
